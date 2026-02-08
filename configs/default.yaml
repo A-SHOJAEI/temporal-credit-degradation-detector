@@ -1,0 +1,91 @@
+# Temporal Credit Degradation Detector Configuration
+# Default configuration for production-grade credit risk modeling
+
+# Model configuration
+model:
+  stability_alpha: 0.1          # Learning rate for weight updates (0.01-0.3)
+  min_weight: 0.05             # Minimum weight for any model (0.01-0.1)
+  recalibration_threshold: 0.15 # Brier score threshold for triggering recalibration (0.1-0.25)
+  calibration_window: 1000     # Rolling window size for calibration monitoring (500-2000)
+  random_state: 42             # Random seed for reproducibility
+
+# Data preprocessing configuration
+preprocessing:
+  handle_missing: true         # Enable missing value handling
+  create_temporal_features: true  # Create time-based features
+  create_risk_features: true   # Create domain-specific risk features
+  scale_features: true         # Apply standard scaling to numeric features
+  remove_redundant: true       # Remove constant and duplicate features
+  discretize_continuous: false # Discretize continuous features into bins
+  feature_selection: false     # Enable feature selection
+  max_features: null           # Maximum number of features to keep (null = no limit)
+
+# Training configuration
+training:
+  cv_folds: 5                  # Number of cross-validation folds (2-10)
+  max_updates: 50              # Maximum number of weight update cycles (10-100)
+  patience: 5                  # Early stopping patience (3-10)
+  optimize_hyperparameters: true  # Enable hyperparameter optimization
+  n_hp_trials: 30             # Number of hyperparameter optimization trials (10-100)
+  early_stopping: true        # Use early stopping during training
+  save_checkpoints: true      # Save model checkpoints
+  use_sample_weights: false   # Use sample weights for imbalanced data
+
+# Evaluation configuration
+evaluation:
+  calibration_bins: 10         # Number of bins for calibration analysis (5-20)
+  significance_level: 0.05     # Statistical significance threshold for drift tests
+  drift_window_size: 1000     # Window size for drift detection (500-2000)
+  temporal_analysis: true     # Enable temporal stability analysis
+  business_metrics: true      # Calculate business-relevant metrics
+  save_predictions: true      # Save predictions for analysis
+
+# Data configuration
+data:
+  data_path: null              # Path to data directory (null = use synthetic data)
+  home_credit_samples: 50000   # Number of Home Credit samples to load
+  lending_club_samples: 30000  # Number of Lending Club samples to load
+  train_months: 12            # Number of months for training data
+  val_months: 4               # Number of months for validation data
+  test_months: 8              # Number of months for test data
+  temporal_column: 'APPLICATION_MONTH'  # Column containing temporal information
+  target_column: 'TARGET'     # Target column name
+  sample_weights_column: null  # Column containing sample weights (optional)
+
+# Experiment tracking configuration
+experiment:
+  experiment_name: 'temporal_credit_degradation'  # MLflow experiment name
+  run_name: null              # MLflow run name (null = auto-generate)
+  mlflow_tracking_uri: null   # MLflow tracking server URI (null = local)
+  artifact_location: null     # MLflow artifact store location
+  log_artifacts: true         # Log model artifacts to MLflow
+  log_model: true            # Log model to MLflow model registry
+
+# General settings
+random_state: 42             # Global random seed
+log_level: 'INFO'            # Logging level (DEBUG, INFO, WARNING, ERROR)
+output_dir: 'outputs'        # Output directory for results
+model_dir: 'models'          # Directory for saving models
+
+# Target performance metrics (used for benchmarking)
+targets:
+  auc_roc: 0.82             # Minimum AUC-ROC target
+  brier_score: 0.12         # Maximum Brier score target
+  drift_detection_f1: 0.75  # Minimum F1 score for drift detection
+  calibration_error: 0.05   # Maximum calibration error target
+
+# Business parameters (used for business metric calculations)
+business:
+  default_loss: 1.0         # Loss incurred when a default occurs
+  profit_margin: 0.15       # Profit margin on successful loans
+  approval_threshold: 0.5   # Default approval threshold
+
+# Advanced settings (for expert users)
+advanced:
+  ensemble_size: 4          # Number of base models in ensemble
+  base_model_types: ['lightgbm', 'catboost']  # Types of base models to use
+  cross_validation_strategy: 'stratified'  # CV strategy (stratified, time_series)
+  hyperparameter_search_strategy: 'optuna'  # HP search method (optuna, grid, random)
+  drift_detection_methods: ['ks_test', 'js_divergence']  # Drift detection methods
+  calibration_method: 'isotonic'  # Calibration method (isotonic, sigmoid)
+  feature_importance_method: 'shap'  # Feature importance calculation method

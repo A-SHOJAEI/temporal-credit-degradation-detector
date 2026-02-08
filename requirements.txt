@@ -1,0 +1,61 @@
+# Core ML libraries
+numpy>=1.21.0
+pandas>=1.3.0
+scikit-learn>=1.0.0
+scipy>=1.7.0
+
+# Gradient boosting libraries
+lightgbm>=3.3.0
+catboost>=1.0.0
+
+# Hyperparameter optimization
+optuna>=3.0.0
+optuna-integration[sklearn]>=3.0.0
+
+# Feature engineering
+feature-engine>=1.5.0
+
+# Experiment tracking
+mlflow>=2.0.0
+
+# Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+plotly>=5.0.0
+
+# Configuration management
+pyyaml>=6.0
+
+# Jupyter notebook support
+jupyter>=1.0.0
+ipykernel>=6.0.0
+ipywidgets>=7.6.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Development tools
+black>=22.0.0
+flake8>=5.0.0
+mypy>=0.991
+
+# Utilities
+joblib>=1.1.0
+tqdm>=4.64.0
+python-dateutil>=2.8.0
+
+# Statistical analysis
+statsmodels>=0.13.0
+
+# Optional: GPU acceleration (uncomment if needed)
+# cudf>=22.0.0
+# cuml>=22.0.0
+
+# Optional: Additional feature engineering (uncomment if needed)
+# category_encoders>=2.5.0
+# imbalanced-learn>=0.9.0
+
+# Data validation (uncomment if needed)
+# great_expectations>=0.15.0
+# pandera>=0.13.0
