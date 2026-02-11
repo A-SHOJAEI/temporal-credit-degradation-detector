@@ -1,0 +1,106 @@
+# Ablation Study Configuration
+# This config disables the stability-weighted ensemble to demonstrate the impact
+# of the novel contribution by using a simpler baseline approach
+
+# Model configuration - ABLATION: Disable adaptive weighting
+model:
+  stability_alpha: 0.0          # DISABLED: No adaptive weight updates (baseline: 0.1)
+  min_weight: 0.5              # Equal weighting enforced (baseline: 0.05)
+  recalibration_threshold: 1.0  # DISABLED: No recalibration (baseline: 0.15)
+  calibration_window: 1000
+  random_state: 42
+
+# Data preprocessing configuration
+preprocessing:
+  handle_missing: true
+  create_temporal_features: true
+  create_risk_features: true
+  scale_features: true
+  remove_redundant: true
+  discretize_continuous: false
+  feature_selection: false
+  max_features: null
+
+# Training configuration
+training:
+  cv_folds: 5
+  max_updates: 50
+  patience: 5
+  optimize_hyperparameters: true
+  n_hp_trials: 30
+  early_stopping: true
+  save_checkpoints: true
+  use_sample_weights: false
+
+# Evaluation configuration
+evaluation:
+  calibration_bins: 10
+  significance_level: 0.05
+  drift_window_size: 1000
+  temporal_analysis: true
+  business_metrics: true
+  save_predictions: true
+
+# Data configuration
+data:
+  data_path: null
+  home_credit_samples: 50000
+  lending_club_samples: 30000
+  train_months: 12
+  val_months: 4
+  test_months: 8
+  temporal_column: 'APPLICATION_MONTH'
+  target_column: 'TARGET'
+  sample_weights_column: null
+
+# Experiment tracking configuration
+experiment:
+  experiment_name: 'ablation_no_stability_weighting'
+  run_name: 'baseline_static_ensemble'
+  mlflow_tracking_uri: null
+  artifact_location: null
+  log_artifacts: true
+  log_model: true
+
+# General settings
+random_state: 42
+log_level: 'INFO'
+output_dir: 'outputs'
+model_dir: 'models'
+
+# Target performance metrics (used for benchmarking)
+targets:
+  auc_roc: 0.82
+  brier_score: 0.12
+  drift_detection_f1: 0.75
+  calibration_error: 0.05
+
+# Business parameters (used for business metric calculations)
+business:
+  default_loss: 1.0
+  profit_margin: 0.15
+  approval_threshold: 0.5
+
+# Advanced settings (for expert users)
+advanced:
+  ensemble_size: 4
+  base_model_types: ['lightgbm', 'catboost']
+  cross_validation_strategy: 'stratified'
+  hyperparameter_search_strategy: 'optuna'
+  drift_detection_methods: ['ks_test', 'js_divergence']
+  calibration_method: 'isotonic'
+  feature_importance_method: 'shap'
+
+# ABLATION STUDY NOTES:
+# This configuration demonstrates the impact of the stability-weighted ensemble by:
+# 1. Setting stability_alpha=0.0: Disables adaptive weight updates
+# 2. Setting min_weight=0.5: Forces equal weighting between models
+# 3. Setting recalibration_threshold=1.0: Disables automatic recalibration
+#
+# Expected Impact:
+# - Baseline model will show degraded performance during regime shifts
+# - Higher calibration error compared to stability-weighted approach
+# - Reduced adaptability to temporal drift
+# - Demonstrates the value of the novel stability-weighting mechanism
+#
+# Usage: python scripts/train.py --config configs/ablation.yaml
