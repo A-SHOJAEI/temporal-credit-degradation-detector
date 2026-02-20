@@ -126,7 +126,6 @@ mlflow.db
 
 # Outputs and results
 outputs/
-results/
 logs/
 artifacts/
 plots/

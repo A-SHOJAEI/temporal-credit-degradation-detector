@@ -1,0 +1,101 @@
+{
+  "experiment": {
+    "name": "temporal_credit_model",
+    "date": "2026-02-19",
+    "dataset": "Synthetic Home Credit",
+    "sample_size": 50000,
+    "train_samples": 25068,
+    "validation_samples": 8321,
+    "test_samples": 16611,
+    "train_default_rate": 0.456,
+    "validation_default_rate": 0.352,
+    "test_default_rate": 0.498,
+    "num_features": 75,
+    "temporal_periods": 24,
+    "temporal_split": "12/4/8 months (train/val/test)"
+  },
+  "model": {
+    "type": "StabilityWeightedEnsemble",
+    "base_models": ["LightGBM", "CatBoost"],
+    "num_base_models": 3,
+    "hyperparameters": {
+      "stability_alpha": 0.1762310871557555,
+      "min_weight": 0.08755054074495426,
+      "recalibration_threshold": 0.19242082475733563,
+      "calibration_window": 1000
+    },
+    "hyperparameter_optimization": {
+      "method": "Optuna",
+      "num_trials": 30
+    }
+  },
+  "cross_validation": {
+    "num_folds": 5,
+    "total_cv_samples": 33389,
+    "target_distribution": {
+      "class_0": 19029,
+      "class_1": 14360
+    },
+    "fold_results": {
+      "fold_1": {"auc_roc": 0.7299},
+      "fold_2": {"auc_roc": 0.7278},
+      "fold_3": {"auc_roc": 0.7265},
+      "fold_4": {"auc_roc": 0.7389},
+      "fold_5": {"auc_roc": 0.7189}
+    },
+    "best_fold": 4,
+    "best_fold_auc": 0.7389,
+    "aggregate_metrics": {
+      "auc_roc": {"mean": 0.728397540122206, "std": 0.006432962734753442},
+      "auc_pr": {"mean": 0.6267649916374205, "std": 0.010032348093990276},
+      "precision": {"mean": 0.6416669252561238, "std": 0.006982472980851793},
+      "recall": {"mean": 0.6088440111420612, "std": 0.008116921861884905},
+      "f1_score": {"mean": 0.6248027760335781, "std": 0.0066933756173967445},
+      "brier_score": {"mean": 0.2074124233781997, "std": 0.0017435437038038103},
+      "log_loss": {"mean": 0.6034648751638902, "std": 0.003712821185459524},
+      "calibration_error": {"mean": 0.041347690407536865, "std": 0.008612065836065198},
+      "specificity": {"mean": 0.7433918779601749, "std": 0.006640043247784913},
+      "sensitivity": {"mean": 0.6088440111420612, "std": 0.008116921861884905},
+      "false_positive_rate": {"mean": 0.2566081220398251, "std": 0.006640043247784913}
+    }
+  },
+  "test_results": {
+    "dataset": "home_credit",
+    "num_samples": 16611,
+    "metrics": {
+      "auc_roc": 0.9374,
+      "brier_score": 0.1596,
+      "calibration_error": 0.2247,
+      "precision": 0.9247,
+      "recall": 0.7077
+    }
+  },
+  "lending_club_evaluation": {
+    "status": "skipped",
+    "reason": "Different feature schema between Home Credit and Lending Club datasets"
+  },
+  "drift_analysis": {
+    "status": "skipped",
+    "reason": "Different feature schemas between datasets prevented cross-dataset drift analysis"
+  },
+  "training_details": {
+    "total_training_time_approx": "2.5 hours",
+    "hyperparameter_optimization_time_approx": "2+ hours",
+    "peak_memory_usage_mb": 918.6,
+    "framework": "MLflow",
+    "preprocessing": {
+      "numeric_features": 48,
+      "categorical_features": 2,
+      "temporal_features": 26,
+      "total_engineered_features": 75,
+      "steps": [
+        "Temporal feature creation",
+        "Risk feature engineering",
+        "Missing value handling",
+        "Categorical encoding",
+        "Redundant feature removal",
+        "Feature scaling"
+      ]
+    }
+  }
+}
